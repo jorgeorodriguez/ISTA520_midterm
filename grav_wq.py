@@ -46,10 +46,10 @@ gp = open(grav_pos_file, 'r')
 count = 0
 for line in gp:
 	gp_list.append(line.split())
-	command = "python grav.py density_grid.txt %s %s %s %s" % (gp_list[count][0], gp_list[count][1], gp_list[count][2], gp_list[count][3])
-	print command
+	command = "python grav.py " + density_file + " %s %s %s %s" % (gp_list[count][0], gp_list[count][1], gp_list[count][2], gp_list[count][3])
+	#print command
 	outfile = str(gp_list[count][0]) +"_" + density_file +".out"
-	print outfile
+	#print outfile
 	count += 1
 	T = Task(command)
 	T.specify_file(grav_file, grav_file, WORK_QUEUE_INPUT, cache = TRUE)
