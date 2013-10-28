@@ -13,10 +13,12 @@ import sys
 start_timestep = 1
 #end_timestep = 55
 end_timestep = 1
-
 PORT_ID = 54601
-
 queue_wait_time = 10 # how many seconds to wait for the results
+grav_pos_file = "grav_pos.txt"
+script_file = "grav_per_point.py"
+helper_script_file = "prism.py"
+density_grid = "_density_grid.txt"
 
 num_args = 1 # including the script name
 
@@ -31,9 +33,6 @@ elif len(sys.argv) <> num_args:
     print "The script expects %d arguments. You provided %d." % (num_args, len(sys.argv))
     print_usage()
 
-
-grav_pos_file = "grav_pos.txt"
-script_file = "grav_per_point.py"
 
 try:
 	Q = WorkQueue(port=PORT_ID)
@@ -51,9 +50,11 @@ count = 0
 for line in gp:
 	gp_list.append(line.split())
 	for i in range(start_timestep, end_timestep+1): # +1, because of the way Python runs its ranges
-		density_file = "%d_density_grid.txt" % (i)
+		#density_file = "%d_density_grid.txt" % (i)
+		density_file = str(i) + density_grid
 		id = str(gp_list[count][0])
-		outfile = id+"_%d_density_grid.txt.out" % (i)
+		#outfile = id+"_%d_density_grid.txt.out" % (i)
+		outfile = density_file + ".out"
 		print outfile
 		
 		#command = "python grav_per_point.py " + density_file + " %s %s %s %s" % (gp_list[count][0], gp_list[count][1], gp_list[count][2], gp_list[count][3])
@@ -61,8 +62,7 @@ for line in gp:
 		print command
 		T = Task(command)
 		T.specify_file(script_file, script_file, WORK_QUEUE_INPUT, cache = True)
-		T.specify_file("prism.py", "prism.py", WORK_QUEUE_INPUT, cache = True)
-		T.specify_file(grav_pos_file, grav_pos_file, WORK_QUEUE_INPUT, cache = True)
+		T.specify_file(helper_script_file, helper_script_file, WORK_QUEUE_INPUT, cache = True)
 		T.specify_file(density_file, density_file, WORK_QUEUE_INPUT, cache = True)
 		T.specify_file(outfile, outfile, WORK_QUEUE_OUTPUT, cache = False)
 		taskid = Q.submit(T)
@@ -74,13 +74,9 @@ print "Done."
 print "Waiting for tasks to complete..."
 while not Q.empty():
     T = Q.wait( queue_wait_time ) # wait specifies how long the queue waits for results from workers
-    """
-    if T is None:
-	print "Queue timed out after %d seconds!" % (queue_wait_time)
-    """
     if T:
         print "Task (id# %d) complete: %s (return code %d)" % (T.id, T.command, T.return_status)
         if T.return_status != 0:
             print "Task result (%s): %s" % (T.result, T.output)
-        print "App delay = %; bytes transferred = %d; transfer time = %d; execution time = %d" % (T.app_delay, T.total_bytes_transferred, T.total_transfer_time, T.cmd_execution_time )
+        print "transfer time = %d; execution time = %d" % (T.total_transfer_time, T.cmd_execution_time )
 print "done."
