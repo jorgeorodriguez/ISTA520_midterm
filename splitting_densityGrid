@@ -2,8 +2,8 @@
 #
 #
 #
+#I have sucessfully added this script into our repository
 #
-
 gravPosFile= raw_input("Enter in the grav pos file to be sorted: ")
 print gravPosFile
 file=open(gravPosFile.strip(),'r')
