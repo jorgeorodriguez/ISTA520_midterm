@@ -80,5 +80,7 @@ while not Q.empty():
     """
     if T:
         print "Task (id# %d) complete: %s (return code %d)" % (T.id, T.command, T.return_status)
-	print "Task result (%s): %s" % (T.result, T.output)
+        if T.return_status != 0:
+            print "Task result (%s): %s" % (T.result, T.output)
+        print "App delay = %; bytes transferred = %d; transfer time = %d; execution time = %d" % (T.app_delay, T.total_bytes_transferred, T.total_transfer_time, T.cmd_execution_time )
 print "done."
