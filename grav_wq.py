@@ -17,10 +17,10 @@ start_timestep = 0
 end_timestep = 1
 PORT_ID = 54601
 queue_wait_time = 10 # how many seconds to wait for the results
-grav_pos_file = "grav_pos.txt"
+#grav_pos_file = "grav_pos.txt"
+grav_pos_file = "grav_pos/grav_pos_5.txt"
 script_file = "grav_per_point.py"
 helper_script_file = "prism.py"
-#density_grid = "_density_grid.txt"
 density_grid = "density_grid_"
 timing_file = "timing_"
 
@@ -48,6 +48,7 @@ print datetime.now()
 
 #print "Processing %d timesteps (start at %d, end at %d)." % ((end_timestep+1 - start_timestep), start_timestep, end_timestep )
 print "Processing %d timesteps (start at %d, end at %d)." % ((end_timestep - start_timestep), start_timestep, end_timestep )
+wallclock = time.time()
 gp_list = []
 gp = open(grav_pos_file, 'r')
 print "Processing %s file to create tasks." % (grav_pos_file)
@@ -58,10 +59,11 @@ for line in gp:
 	for i in range(start_timestep, end_timestep): 
 		#density_file = "%d_density_grid.txt" % (i)
 		#density_file = str(i) + density_grid
-		density_file = "%s_%.2d" % (density_grid, i) 
+		density_file = "%s%.2d" % (density_grid, i)
 		id = str(gp_list[count][0])
 		#outfile = id+"_%d_density_grid.txt.out" % (i)
-		outfile = str(id) + "_" + density_file + ".out"
+		#outfile = str(id) + "_" + density_file + ".out"
+		outfile = density_file + "_" + str(id)  + ".out"
 		#print outfile
 		
 		#command = "python grav_per_point.py " + density_file + " %s %s %s %s" % (gp_list[count][0], gp_list[count][1], gp_list[count][2], gp_list[count][3])
@@ -85,7 +87,7 @@ while not Q.empty():
         print "Task #%d complete: %s (returned %d)" % (T.id, T.command, T.return_status)
         if T.return_status != 0:
             print "Task result (%s): %s" % (T.result, T.output)
-        print "Transfer time = %d; execution time = %d" % (T.total_transfer_time, T.cmd_execution_time )
+        print "execution time = %d" % (T.cmd_execution_time )
 	# Save the timing information for each task
 	timing_fh = open( timing_file + str(T.id), 'w')
 	#timing_fh.write("%d\t%d\n" % (T.total_transfer_time, T.cmd_execution_time ))
@@ -95,6 +97,7 @@ tend = time.clock()
 taskTime = "%.3f" % (tend-tstart)
 #print "Finished processing %d tasks." % (count)
 print datetime.now()
-print "Finished processing %d tasks in %s seconds." % (count, taskTime)
+print "Finished processing %d tasks in %s seconds (wallclock %s))." % (count, taskTime, time.time() - wallclock )
+#print "Finished processing %d tasks in %s seconds." % (count, taskTime)
 #print "Finished processing %d tasks in %d seconds (%f minutes)." % (count, taskTime, (tend-tstart)/60.0)
 #print "Finished processing %d tasks in %d seconds (%f minutes)." % (count, taskTime, float(float(taskTime)/60.0))
