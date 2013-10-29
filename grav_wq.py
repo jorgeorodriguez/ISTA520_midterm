@@ -19,12 +19,12 @@ grav_pos_file = "grav_pos.txt"
 script_file = "grav_per_point.py"
 helper_script_file = "prism.py"
 density_grid = "_density_grid.txt"
+timing_file = "timing_"
 
 num_args = 1 # including the script name
 
 def print_usage():
     print "Usage: python ", sys.argv[0] 
-    #print "sys.argv[0] : Indicate the script file name"
     sys.exit(1)
 
 if (len(sys.argv) != 1):
@@ -41,10 +41,11 @@ except:
 	sys.exit(1)
 
 print "Listening on port %d." % Q.port
-
+print "Processing %d timesteps (start at %d, end at %d)." % ((end_timestep+1 - start_timestep), start_timestep, end_timestep )
 
 gp_list = []
 gp = open(grav_pos_file, 'r')
+print "Processing %s file to create tasks." % (grav_pos_file)
 
 count = 0
 for line in gp:
@@ -54,12 +55,12 @@ for line in gp:
 		density_file = str(i) + density_grid
 		id = str(gp_list[count][0])
 		#outfile = id+"_%d_density_grid.txt.out" % (i)
-		outfile = density_file + ".out"
-		print outfile
+		outfile = str(id) + "_" + density_file + ".out"
+		#print outfile
 		
 		#command = "python grav_per_point.py " + density_file + " %s %s %s %s" % (gp_list[count][0], gp_list[count][1], gp_list[count][2], gp_list[count][3])
 		command = "python grav_per_point.py " + density_file + " %s %s %s %s > %s" % (gp_list[count][0], gp_list[count][1], gp_list[count][2], gp_list[count][3], outfile)
-		print command
+		#print command
 		T = Task(command)
 		T.specify_file(script_file, script_file, WORK_QUEUE_INPUT, cache = True)
 		T.specify_file(helper_script_file, helper_script_file, WORK_QUEUE_INPUT, cache = True)
@@ -68,15 +69,18 @@ for line in gp:
 		taskid = Q.submit(T)
 	count += 1
 gp.close()
-print "Done."
 
- 
-print "Waiting for tasks to complete..."
+print "Waiting for %d tasks to complete..." % (count)
 while not Q.empty():
     T = Q.wait( queue_wait_time ) # wait specifies how long the queue waits for results from workers
     if T:
-        print "Task (id# %d) complete: %s (return code %d)" % (T.id, T.command, T.return_status)
+        print "Task #%d complete: %s (returned %d)" % (T.id, T.command, T.return_status)
         if T.return_status != 0:
             print "Task result (%s): %s" % (T.result, T.output)
-        print "transfer time = %d; execution time = %d" % (T.total_transfer_time, T.cmd_execution_time )
-print "done."
+        print "Transfer time = %d; execution time = %d" % (T.total_transfer_time, T.cmd_execution_time )
+	# Save the timing information for each task
+	timing_fh = open( timing_file + str(T.id), 'w')
+	timing_fh.write("%d\t%d\n" % (T.total_transfer_time, T.cmd_execution_time ))
+	timing_fh.close()
+
+print "Finished processing %d tasks." % (count)
