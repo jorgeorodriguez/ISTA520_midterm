@@ -9,6 +9,8 @@
 
 from work_queue import *
 import sys
+import time
+from datetime import datetime
 
 start_timestep = 1
 #end_timestep = 55
@@ -41,12 +43,12 @@ except:
 	sys.exit(1)
 
 print "Listening on port %d." % Q.port
-print "Processing %d timesteps (start at %d, end at %d)." % ((end_timestep+1 - start_timestep), start_timestep, end_timestep )
+print datetime.now()
 
+print "Processing %d timesteps (start at %d, end at %d)." % ((end_timestep+1 - start_timestep), start_timestep, end_timestep )
 gp_list = []
 gp = open(grav_pos_file, 'r')
 print "Processing %s file to create tasks." % (grav_pos_file)
-
 count = 0
 for line in gp:
 	gp_list.append(line.split())
@@ -71,6 +73,8 @@ for line in gp:
 gp.close()
 
 print "Waiting for %d tasks to complete..." % (count)
+print datetime.now()
+tstart = time.clock()
 while not Q.empty():
     T = Q.wait( queue_wait_time ) # wait specifies how long the queue waits for results from workers
     if T:
@@ -80,7 +84,13 @@ while not Q.empty():
         print "Transfer time = %d; execution time = %d" % (T.total_transfer_time, T.cmd_execution_time )
 	# Save the timing information for each task
 	timing_fh = open( timing_file + str(T.id), 'w')
-	timing_fh.write("%d\t%d\n" % (T.total_transfer_time, T.cmd_execution_time ))
+	#timing_fh.write("%d\t%d\n" % (T.total_transfer_time, T.cmd_execution_time ))
+	timing_fh.write("%d\n" % ( T.cmd_execution_time ))
 	timing_fh.close()
-
-print "Finished processing %d tasks." % (count)
+tend = time.clock()
+taskTime = "%.3f" % (tend-tstart)
+#print "Finished processing %d tasks." % (count)
+print datetime.now()
+print "Finished processing %d tasks in %s seconds." % (count, taskTime)
+#print "Finished processing %d tasks in %d seconds (%f minutes)." % (count, taskTime, (tend-tstart)/60.0)
+#print "Finished processing %d tasks in %d seconds (%f minutes)." % (count, taskTime, float(float(taskTime)/60.0))
