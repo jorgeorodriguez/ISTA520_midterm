@@ -12,7 +12,7 @@ import sys
 import time
 from datetime import datetime
 
-start_timestep = 1
+start_timestep = 0
 #end_timestep = 55
 end_timestep = 1
 PORT_ID = 54601
@@ -20,7 +20,8 @@ queue_wait_time = 10 # how many seconds to wait for the results
 grav_pos_file = "grav_pos.txt"
 script_file = "grav_per_point.py"
 helper_script_file = "prism.py"
-density_grid = "_density_grid.txt"
+#density_grid = "_density_grid.txt"
+density_grid = "density_grid_"
 timing_file = "timing_"
 
 num_args = 1 # including the script name
@@ -45,16 +46,19 @@ except:
 print "Listening on port %d." % Q.port
 print datetime.now()
 
-print "Processing %d timesteps (start at %d, end at %d)." % ((end_timestep+1 - start_timestep), start_timestep, end_timestep )
+#print "Processing %d timesteps (start at %d, end at %d)." % ((end_timestep+1 - start_timestep), start_timestep, end_timestep )
+print "Processing %d timesteps (start at %d, end at %d)." % ((end_timestep - start_timestep), start_timestep, end_timestep )
 gp_list = []
 gp = open(grav_pos_file, 'r')
 print "Processing %s file to create tasks." % (grav_pos_file)
 count = 0
 for line in gp:
 	gp_list.append(line.split())
-	for i in range(start_timestep, end_timestep+1): # +1, because of the way Python runs its ranges
+	#for i in range(start_timestep, end_timestep+1): # +1, because of the way Python runs its ranges
+	for i in range(start_timestep, end_timestep): 
 		#density_file = "%d_density_grid.txt" % (i)
-		density_file = str(i) + density_grid
+		#density_file = str(i) + density_grid
+		density_file = "%s_%.2d" % (density_grid, i) 
 		id = str(gp_list[count][0])
 		#outfile = id+"_%d_density_grid.txt.out" % (i)
 		outfile = str(id) + "_" + density_file + ".out"
