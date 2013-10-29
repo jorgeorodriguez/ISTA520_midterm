@@ -10,8 +10,6 @@
 import sys
 from prism import calc_prism, calc_macmillan, calc_pointmass
 from math import sqrt, pow
-from datetime import datetime
-from datetime import date
 import time
 
 tstart = time.clock()
@@ -49,12 +47,12 @@ gp[1] = float(sys.argv[3]) # x
 gp[2] = float(sys.argv[4]) # y
 gp[3] = float(sys.argv[5]) # z
 
-output_file = str(gp[0]) +"_"+ density_file + ".time" #  "id_its_density_grid.txt.time"
-print output_file
+"""
+output_file = str(gp[0]) +"_"+ density_file + ".time" #  "id_ts_density_grid.txt.time"
+#print output_file
 fid = open(output_file,'w')
-
+"""
 g_sum = 0
-g_out =  []
 for prism in density_grid:
 	time_step = prism[0]
 
@@ -87,14 +85,17 @@ for prism in density_grid:
 					  dx, dy, dz, rad)
 	g_sum += g_prism
 # add final time step
-g_out.append([gp[0], time_step, g_sum])
-for line in g_out:
-	sys.stdout.write('%i %i %3.3f\n'%(line[0],line[1],line[2]))
+sys.stdout.write('%3.3f\n'%(g_sum))
 
 tend = time.clock()
-taskTime = "%.5g" % (tend-tstart)
-fid.write(taskTime)
+#taskTime = "%.5g" % (tend-tstart)
+#sys.stdout.write('%3.3f %.5g\n'%(g_sum, taskTime))
+#sys.stdout.write('%3.3f %.5g\n'%(g_sum, (tend-tstart)))
+"""
+fid.write(tend-tstart)
+#fid.write(taskTime)
 
 
 
 fid.close()
+"""
