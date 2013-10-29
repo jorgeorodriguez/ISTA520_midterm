@@ -10,20 +10,19 @@ file=open(gravPosFile.strip(),'r')
 
 firstLine=file.readline().strip()
 
-ts=firstLine[0]
+ts=0+firstLine[0]
 
 lastLine=file.readlines()[-1].strip()
 
 file.close()
 
-new_file=open(str(ts)+"_density_grid",'w')
+new_file=open("density_grid_"+str(ts),'w')
 
 new_file.write(firstLine)
 
 file=open(gravPosFile.strip(),'r')
 
 for line in file:
-    print line
     if line =="":#checks to see if there is a blank line in the file
         continue
     elif (lastLine==line):
@@ -36,7 +35,10 @@ for line in file:
 
     else:
         new_file.close()
-        ts=line[0]
+        if line[0]<10:    #adds a 0 in front of any number less than 10
+            ts=0+line[0]
+        else:
+            ts=line[0]
         new_file=open(str(ts)+"_density_grid",'w')#checks to see if there is a blank line in the file
         new_file.write(line)
  
