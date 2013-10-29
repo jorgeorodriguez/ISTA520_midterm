@@ -19,24 +19,28 @@ new_file.write(firstLine+"\n")
 
 
 for line in file:
-    temp=line.split(" ") #splitting the line into a list, its being seperated by white spaces. 
+    temp=line[0:line.find(" ")] #splitting the line into a list, its being seperated by white spaces.
+    temp=int(temp)
+    print type(temp)
     if line =="": #checks to see if there is a blank line in the file
         continue
 
-    elif (temp[0]==ts):
+    elif (temp ==ts):
         new_file.write(line)
 
     else:
         new_file.close()
 
-        if temp[0]=="1" or temp[0]=="2" or temp[0]=="3" or temp[0]=="4" or temp[0]=="5" or temp[0]=="6" or temp[0]=="7" or temp[0]=="8" or temp[0]=="9":  #cant convert input from file to int, dont know why. This can be better coded.   
-            ts=str(0)+temp[0]#adds a 0 in front of any number less than 10
+        #if temp=="1" or temp=="2" or temp=="3" or temp=="4" or temp=="5" or temp=="6" or temp=="7" or temp=="8" or temp =="9":  #cant convert input from file to int, dont know why. This can be better coded.
+        if temp<10:
+
+            ts=str(0)+str(temp)#adds a 0 in front of any number less than 10
             new_file=open("density_grid_"+str(ts),'a')
             new_file.write(line)
 
 
         else:
-            ts=temp[0]
+            ts=str(temp)
         
             new_file=open("density_grid_"+str(ts),'a')
             new_file.write(line)
