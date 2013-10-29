@@ -10,7 +10,7 @@ file=open(gravPosFile.strip(),'r')
 
 firstLine=file.readline().strip()
 
-ts=0+firstLine[0]
+ts=str(0)+firstLine[0]
 
 lastLine=file.readlines()[-1].strip()
 
