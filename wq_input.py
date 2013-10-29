@@ -15,7 +15,6 @@ from datetime import datetime
 start_timestep = 0
 #end_timestep = 55
 end_timestep = 1
-PORT_ID = 54601
 queue_wait_time = 10 # how many seconds to wait for the results
 #grav_pos_file = "grav_pos.txt"
 split_amount = 1
@@ -38,6 +37,19 @@ elif len(sys.argv) <> num_args:
     print "The script expects %d arguments. You provided %d." % (num_args, len(sys.argv))
     print_usage()
 
+split_amount = int(sys.argv[1])
+#PORT_ID = 54601
+PORT_ID = "5%.4d" % (split_amount)
+PORT_ID = int(PORT_ID)
+grav_pos_file = "grav_pos/grav_pos_%d.txt"%(split_amount)
+
+try:
+	gp = open(grav_pos_file, 'r')
+	print "Processing %s file to create tasks." % (grav_pos_file)
+except:
+	print "Unable to open %s file to create tasks." % (grav_pos_file)
+	sys.exit(1)
+
 
 try:
 	Q = WorkQueue(port=PORT_ID)
@@ -52,16 +64,6 @@ print datetime.now()
 print "Processing %d timesteps (start at %d, end at %d)." % ((end_timestep - start_timestep), start_timestep, end_timestep )
 wallclock = time.time()
 gp_list = []
-split_amount = int(sys.argv[1])
-grav_pos_file = "grav_pos/grav_pos_%d.txt"%(split_amount)
-
-try:
-	gp = open(grav_pos_file, 'r')
-	print "Processing %s file to create tasks." % (grav_pos_file)
-except:
-	print "Unable to open %s file to create tasks." % (grav_pos_file)
-	sys.exit(1)
-
 count = 0
 for line in gp:
 	gp_list.append(line.split())
