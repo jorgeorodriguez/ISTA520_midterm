@@ -9,37 +9,31 @@ gravPosFile= raw_input("Enter in the grav pos file to be sorted: ")
 file=open(gravPosFile.strip(),'r')
 
 firstLine=file.readline().strip()
-
 ts=str(0)+firstLine[0]
 
-lastLine=file.readlines()[-1].strip()
-
-file.close()
 
 new_file=open("density_grid_"+str(ts),'w')
 
-new_file.write(firstLine)
+new_file.write(firstLine+"\n")
 
-file=open(gravPosFile.strip(),'r')
 
 for line in file:
+    temp=line.split(" ")#splitting the line into a list, its being seperated by white spaces. 
     if line =="":#checks to see if there is a blank line in the file
         continue
-    elif (lastLine==line):
-        new_file.write(line)
-        new_file.close()
-        break
 
-    elif line[0]==ts:
+    elif (temp[0]==ts):
         new_file.write(line)
 
     else:
         new_file.close()
-        if line[0]<10:    #adds a 0 in front of any number less than 10
-            ts=0+line[0]
+
+        if temp[0]=="2" or temp[0]=="3" or temp[0]=="4" or temp[0]=="5" or temp[0]=="6" or temp[0]=="7" or temp[0]=="8" or temp[0]=="9":  #cant convert input from file to int, dont know why. This can be better coded.   
+            ts=str(0)+temp[0]#adds a 0 in front of any number less than 10
         else:
-            ts=line[0]
-        new_file=open(str(ts)+"_density_grid",'w')#checks to see if there is a blank line in the file
+            ts=temp[0]
+        
+        new_file=open("density_grid_"+str(ts),'w')
         new_file.write(line)
  
 
