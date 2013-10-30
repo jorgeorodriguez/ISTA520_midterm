@@ -9,15 +9,17 @@ Setup:
 
 2.	Download CCTools 4.0.2 & Installing
 	
-    wget http://www.nd.edu/~ccl/software/files/cctools-4.0.2-source.tar.gz
+    	wget http://www.nd.edu/~ccl/software/files/cctools-4.0.2-source.tar.gz
 
-    cd ~/cctools-4.0.2-source
-    ./configure --prefix ~/cctools && make install
+    	cd ~/cctools-4.0.2-source
+    	
+    	./configure --prefix ~/cctools && make install
 
 3.	Set environment variables by running the following commands:
 
-    export PATH=~/cctools/bin:${PATH}
-    export PYTHONPATH=~/cctools/lib/python2.4/site-packages:~/cctools/lib/python2.6/site-packages:${PYTHONPATH}
+    	export PATH=~/cctools/bin:${PATH}
+    	
+    	export PYTHONPATH=~/cctools/lib/python2.4/site-packages:~/cctools/lib/python2.6/site-packages:${PYTHONPATH}
 
 
 
