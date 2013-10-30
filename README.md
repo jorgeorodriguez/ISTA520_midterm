@@ -34,24 +34,20 @@ Get started:
     
     	python split_grav_pos.py
 
-    	Both of these files will get fed into the workqueue
 
-3.	We can now run workqueue to give jobs to workers:
+3.	We can now run workqueue to give jobs to workers. This workqueue needs prism.py and grav_per_point.py so make sure they are in the directory
 
     	python grav_wq.py
     
-    	This workqueue needs prism.py and grav_per_point.py so make sure they are in the directory
 
-3.	Next, we send workers to start processing the tasks:
+4.	Next, we send workers to start processing the tasks. This command will submit a worker to lima with a timeout period of 10 seconds, using port number 54601. 
+    	The last value will specify how many workers you would like to send for this job
 
     	torque_submit_workers -d all -t 10 lima.futuregrid.org 54601 1
 
 
-    	This command will submit a worker to lima with a timeout period of 10 seconds, using port number 54601. 
-    	The last value will specify how many workers you would like to send for this job
 
-
-4.	The grav_wq.py script will generate several output files that will need to be combined into one. For that we can run:
+5.	The grav_wq.py script will generate several output files that will need to be combined into one. For that we can run:
 
     	merge.output.py
 
