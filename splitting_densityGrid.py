@@ -1,4 +1,4 @@
-#This script will take in one input that is dealing with a grav pos file
+#This script will take in one input that is dealing with a density grid file
 #It will then go through the file and make sub files for each Timestep ID
 #Each file will hold all the data that has that ID point
 #
