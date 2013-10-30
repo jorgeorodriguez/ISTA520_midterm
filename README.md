@@ -21,6 +21,8 @@ Setup:
     	export PATH=~/cctools/bin:${PATH}
     	
     	export PYTHONPATH=~/cctools/lib/python2.4/site-packages:~/cctools/lib/python2.6/site-packages:${PYTHONPATH}
+    	
+    	
 
 
 
