@@ -2,6 +2,7 @@
 
 Setup:
 
+
 1.	Download the files from GitHub by entering the following command:
 
     	git clone https://github.com/jorgeorodriguez/ISTA520_midterm.git
@@ -25,6 +26,7 @@ Setup:
 
 
 Get started:
+
 
 1.	Run the following script to split the files into sections for benchmarking:
 
