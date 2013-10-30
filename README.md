@@ -4,7 +4,7 @@ Setup:
 
 1.	Download the files from GitHub by entering the following command:
 
-    git clone https://github.com/jorgeorodriguez/ISTA520_midterm.git
+    	git clone https://github.com/jorgeorodriguez/ISTA520_midterm.git
 
 
 2.	Download CCTools 4.0.2 & Installing
