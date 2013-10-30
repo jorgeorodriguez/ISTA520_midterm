@@ -1,12 +1,14 @@
 ***Operation Manual***
 
 Setup:
+
 1.	Download the files from GitHub by entering the following command:
 
     git clone https://github.com/jorgeorodriguez/ISTA520_midterm.git
 
 
-2.	Download CCTools 4.0.2 & Installing 
+2.	Download CCTools 4.0.2 & Installing
+	
     wget http://www.nd.edu/~ccl/software/files/cctools-4.0.2-source.tar.gz
 
     cd ~/cctools-4.0.2-source
@@ -21,6 +23,7 @@ Setup:
 
 
 Get started:
+
 1.	Run the following script to split the files into sections for benchmarking:
 
     python splitting_densityGrid.py
